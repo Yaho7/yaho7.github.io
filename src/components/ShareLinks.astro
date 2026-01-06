@@ -2,7 +2,7 @@
 import { SHARE_LINKS } from "@/constants";
 import LinkButton from "./LinkButton.astro";
 
-const URL = Astro.url;
+const currentUrl = Astro.url.toString();
 ---
 
 {
@@ -14,10 +14,10 @@ const URL = Astro.url;
           const isWeChat = social.name === "微信";
           return (
             <LinkButton
-              href={`${social.href + URL}`}
+              href={`${social.href}${currentUrl}`}
               class="scale-90 p-2 hover:rotate-6 sm:p-1"
               title={social.linkTitle}
-              data-qr-template={isWeChat ? `${social.href}${encodeURIComponent(URL)}` : undefined}
+              data-qr-template={isWeChat ? `${social.href}${currentUrl}` : undefined}
             >
               <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
               <span class="sr-only">{social.linkTitle}</span>

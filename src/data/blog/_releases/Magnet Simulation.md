@@ -1,7 +1,7 @@
 ---
 title: Magnetic Simulation
 pubDatetime: 2025-04-18
-description: "Magnetic field and force derivations with supporting visuals."
+description: ""
 type: "page"
 ---
 

@@ -2,10 +2,9 @@
 pubDatetime: 2025-03-09
 title: 如何大幅提高latex编译速度
 featured: true
-ogImage: ../../../assets/images/AstroPaper-v5.png
 tags:
   - release
-description: "如何大幅提高latex编译速度"
+description: ""
 
 ---
 
