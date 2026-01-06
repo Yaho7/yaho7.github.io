@@ -36,6 +36,18 @@ async function loadGoogleFonts(
 > {
   const fontsConfig = [
     {
+      name: "Noto Sans SC",
+      font: "Noto+Sans+SC",
+      weight: 400,
+      style: "normal",
+    },
+    {
+      name: "Noto Sans SC",
+      font: "Noto+Sans+SC",
+      weight: 700,
+      style: "bold",
+    },
+    {
       name: "IBM Plex Mono",
       font: "IBM+Plex+Mono",
       weight: 400,
@@ -49,12 +61,26 @@ async function loadGoogleFonts(
     },
   ];
 
-  const fonts = await Promise.all(
+  const settled = await Promise.allSettled(
     fontsConfig.map(async ({ name, font, weight, style }) => {
       const data = await loadGoogleFont(font, text, weight);
       return { name, data, weight, style };
     })
   );
+
+  const fonts = settled
+    .filter((result): result is PromiseFulfilledResult<{
+      name: string;
+      data: ArrayBuffer;
+      weight: number;
+      style: string;
+    }> => result.status === "fulfilled")
+    .map(result => result.value);
+
+  // If remote fonts fail (e.g., network blocked), allow satori to fall back to default fonts.
+  if (fonts.length === 0) {
+    console.warn("Falling back to default fonts: failed to fetch Google Fonts.");
+  }
 
   return fonts;
 }

@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import PhotoWall from "@/components/PhotoWall.astro";
+import photos from "@/data/photos";
+import { SITE } from "@/config";
+
+const pageTitle = "照片墙";
+const pageDesc = "";
+---
+
+<Layout
+  title={`${pageTitle} | ${SITE.title}`}
+  description={`${pageDesc} ${SITE.desc}`}
+>
+  <Header />
+  <Main pageTitle={pageTitle} pageDesc={pageDesc}>
+    <PhotoWall photos={photos} />
+  </Main>
+  <Footer />
+</Layout>

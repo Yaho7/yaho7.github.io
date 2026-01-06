@@ -1,37 +1,30 @@
 ---
 layout: ../layouts/AboutLayout.astro
-title: "About"
 ---
 
-AstroPaper is a minimal, accessible and SEO-friendly blog theme built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+## 我正在开发的项目
 
-![Astro Paper](public/astropaper-og.jpg)
+- 磁流体分析与仿真平台
+- iOS App：吃什么，药品管理
 
-AstroPaper provides a solid foundation for blogs, or even portfolios\_ with full markdown support, built-in dark mode, and a clean layout that works out-of-the-box.
+## 我关注的领域
 
-The blog posts in this theme also serve as guides, docs or example articles\_ making AstroPaper a flexible starting point for your next content-driven site.
+- iOS / 嵌入式 / 硬件项目
+- 磁流体 / 磁仿真
 
-## Features
+## 技术栈
 
-AstroPaper comes with a set of useful features that make content publishing easy and effective:
+- HTML / CSS / JavaScript
+- Swift / Python / C
+- Linux / Docker
 
-- SEO-friendly
-- Fast performance
-- Light & dark mode
-- Highly customizable
-- Organizable blog posts
-- Responsive & accessible
-- Static search with [PageFind](https://pagefind.app/)
-- Automatic social image generation
+## 兴趣
 
-and so much more.
+- 吉他 / 摄影
+- 骑行
 
-## Show your support
+## 联系方式
 
-If you like [AstroPaper](https://github.com/satnaing/astro-paper), consider giving it a star ⭐️.
+- 邮箱：Qin@yaho7.cn
 
-Found a bug 🐛 or have an improvement ✨ in mind? Feel free to open an [issue](https://github.com/satnaing/astro-paper/issues), submit a [pull request](https://github.com/satnaing/astro-paper/pulls) or start a [discussion](https://github.com/satnaing/astro-paper/discussions).
-
-If you find this theme helpful, you can also [sponsor me on GitHub](https://github.com/sponsors/satnaing) or [buy me a coffee](https://buymeacoffee.com/satnaing) to show your support — every penny counts.
-
-Kyay zuu! 🙏🏼
+感谢你的访问，欢迎交流！

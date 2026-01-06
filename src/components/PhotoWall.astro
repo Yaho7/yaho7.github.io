@@ -1,0 +1,201 @@
+---
+import type { Photo } from "@/data/photos";
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<section class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-background via-background/70 to-accent/10 p-6 sm:p-8">
+  <div class="pointer-events-none absolute -left-20 top-10 h-44 w-44 rounded-full bg-accent/10 blur-3xl" />
+  <div class="pointer-events-none absolute -bottom-12 right-4 h-60 w-60 rounded-full bg-foreground/5 blur-3xl" />
+
+  <div class="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div class="space-y-1">
+      <p class="text-xs uppercase tracking-[0.2em] text-foreground/60">Photo Wall</p>
+      <p class="text-lg font-semibold text-foreground">用照片记录灵感与街景。</p>
+    </div>
+    <div class="flex flex-wrap gap-2 text-sm text-foreground/70">
+      <span class="rounded-full border border-border/70 bg-background/80 px-3 py-1">共 {photos.length} 张</span>
+    </div>
+  </div>
+
+  <div class="relative mt-6 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+    {photos.map(photo => (
+      <figure
+        data-photo-card
+        data-src={photo.src}
+        data-title={photo.title}
+        data-alt={photo.alt}
+        data-location={photo.location ?? "随记"}
+        data-date={photo.date ?? ""}
+        tabindex="0"
+        role="button"
+        aria-label={`查看 ${photo.title}`}
+        class="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-background/70 shadow-lg shadow-accent/10 transition duration-300 hover:-translate-y-1 hover:shadow-accent/20 focus-visible:-translate-y-1 focus-visible:shadow-accent/30 focus-visible:outline-none"
+      >
+        <img
+          src={photo.src}
+          alt={photo.alt}
+          loading="lazy"
+          decoding="async"
+          class="size-full object-cover transition duration-500 group-hover:scale-[1.04]"
+        />
+      </figure>
+    ))}
+  </div>
+
+  <div
+    id="photo-lightbox"
+    class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/75 backdrop-blur-md p-3 sm:p-6"
+    aria-modal="true"
+    role="dialog"
+  >
+    <div
+      class="absolute inset-0"
+      aria-hidden="true"
+      data-lightbox-overlay
+    ></div>
+    <div class="relative flex w-[min(96vw,1200px)] flex-col gap-4 rounded-3xl border border-border/80 bg-background/95 p-4 shadow-2xl shadow-accent/25 sm:p-6">
+      <button
+        type="button"
+        data-lightbox-close
+        class="self-end rounded-full border border-border/80 bg-background/80 px-3 py-1 text-sm text-foreground/80 shadow hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+        aria-label="关闭预览"
+      >
+        关闭
+      </button>
+      <div class="relative flex min-h-[50vh] items-center justify-center overflow-hidden rounded-2xl border border-border/70 bg-muted/30 p-3 sm:p-4">
+        <button
+          type="button"
+          data-lightbox-prev
+          class="group absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border/70 bg-background/80 px-3 py-2 text-sm text-foreground shadow-lg transition hover:-translate-y-1/2 hover:-translate-x-0.5 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+          aria-label="上一张"
+        >
+          ‹
+        </button>
+        <img
+          data-lightbox-img
+          src=""
+          alt=""
+          class="mx-auto max-h-[80vh] max-w-[90vw] object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+        <button
+          type="button"
+          data-lightbox-next
+          class="group absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border/70 bg-background/80 px-3 py-2 text-sm text-foreground shadow-lg transition hover:-translate-y-1/2 hover:translate-x-0.5 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+          aria-label="下一张"
+        >
+          ›
+        </button>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 text-sm text-foreground/80">
+        <div>
+          <div class="text-lg font-semibold text-foreground" data-lightbox-title></div>
+          <div class="mt-1 flex flex-wrap gap-2" data-lightbox-meta></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const setupLightbox = () => {
+    const cards = Array.from(
+      document.querySelectorAll('[data-photo-card]')
+    ) as HTMLElement[];
+    const lightbox = document.querySelector('#photo-lightbox') as HTMLElement | null;
+    if (!cards.length || !lightbox || lightbox.dataset.bound === 'true') return;
+    const lightboxImg = lightbox.querySelector('[data-lightbox-img]') as
+      | HTMLImageElement
+      | null;
+    const lightboxTitle = lightbox.querySelector('[data-lightbox-title]') as
+      | HTMLElement
+      | null;
+    const lightboxMeta = lightbox.querySelector('[data-lightbox-meta]') as
+      | HTMLElement
+      | null;
+    const closeBtn = lightbox.querySelector('[data-lightbox-close]') as
+      | HTMLButtonElement
+      | null;
+    const prevBtn = lightbox.querySelector('[data-lightbox-prev]') as
+      | HTMLButtonElement
+      | null;
+    const nextBtn = lightbox.querySelector('[data-lightbox-next]') as
+      | HTMLButtonElement
+      | null;
+
+    let currentIndex = 0;
+    lightbox.dataset.bound = 'true';
+
+    const updateLightbox = (index: number) => {
+      if (!lightboxImg || !lightboxTitle || !lightboxMeta) return;
+      const card = cards[index];
+      if (!card) return;
+      const { src, title, alt, location, date } = card.dataset;
+      lightboxImg.src = src || '';
+      lightboxImg.alt = alt || title || '';
+      lightboxTitle.textContent = title || '';
+
+      const metaParts = [location, date].filter(Boolean);
+      lightboxMeta.innerHTML = metaParts
+        .map(text => `<span class="rounded-full border border-border/70 px-2 py-1">${text}</span>`)
+        .join('');
+    };
+
+    const close = () => {
+      lightbox.classList.add('hidden');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    const open = (card: HTMLElement) => {
+      currentIndex = Math.max(0, cards.indexOf(card));
+      updateLightbox(currentIndex);
+
+      lightbox.classList.remove('hidden');
+      lightbox.removeAttribute('aria-hidden');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const step = (delta: number) => {
+      if (lightbox.classList.contains('hidden')) return;
+      currentIndex = (currentIndex + delta + cards.length) % cards.length;
+      updateLightbox(currentIndex);
+    };
+
+    cards.forEach(card => {
+      const handler = () => open(card);
+      card.addEventListener('click', handler);
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          handler();
+        }
+      });
+    });
+
+    closeBtn?.addEventListener('click', close);
+    prevBtn?.addEventListener('click', () => step(-1));
+    nextBtn?.addEventListener('click', () => step(1));
+    lightbox.addEventListener('click', event => {
+      const target = event.target as HTMLElement;
+      if (target === lightbox || target.dataset.lightboxOverlay !== undefined) {
+        close();
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowLeft') step(-1);
+      if (event.key === 'ArrowRight') step(1);
+    });
+  };
+
+  document.addEventListener('astro:page-load', setupLightbox);
+  document.addEventListener('astro:after-swap', setupLightbox);
+  setupLightbox();
+</script>

@@ -15,10 +15,8 @@ let tags = getUniqueTags(posts);
 
 <Layout title={`Tags | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
-    <ul class="flex flex-wrap gap-6">
-      {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
-    </ul>
+  <Main pageTitle="标签" pageDesc="所有文章标签列表。">
+    <p class="text-foreground/70">标签页已关闭。</p>
   </Main>
   <Footer />
 </Layout>
