@@ -5,15 +5,91 @@ import LinkButton from "./LinkButton.astro";
 
 <div class="flex flex-wrap items-center gap-1">
   {
-    SOCIALS.map(social => (
-      <LinkButton
-        href={social.href}
-        class="p-2 hover:rotate-6 sm:p-1"
-        title={social.linkTitle}
-      >
-        <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
-        <span class="sr-only">{social.linkTitle}</span>
-      </LinkButton>
-    ))
+    SOCIALS.map(social => {
+      const isWeChat = Boolean(social.qrImage);
+      return (
+        <LinkButton
+          href={social.href}
+          class="p-2 hover:rotate-6 sm:p-1"
+          title={social.linkTitle}
+          data-qr-img={isWeChat ? social.qrImage : undefined}
+        >
+          <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
+          <span class="sr-only">{social.linkTitle}</span>
+        </LinkButton>
+      );
+    })
   }
 </div>
+
+<div
+  id="social-qr-modal"
+  class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 p-4"
+  aria-hidden="true"
+>
+  <div class="relative max-w-sm rounded-2xl border border-border bg-background p-4 text-center shadow-2xl">
+    <button
+      type="button"
+      class="absolute right-2 top-2 rounded-full border border-border px-2 py-1 text-xs text-foreground/80 hover:text-accent"
+      data-qr-close
+      aria-label="关闭二维码"
+    >
+      关闭
+    </button>
+    <p class="mb-3 text-sm text-foreground/80">微信扫码添加</p>
+    <img
+      id="social-qr-image"
+      src=""
+      alt="微信二维码"
+      class="mx-auto h-64 w-64 rounded-lg border border-border bg-white object-contain"
+    />
+  </div>
+</div>
+
+<script>
+  const bindSocialQR = () => {
+    const buttons = Array.from(
+      document.querySelectorAll('[data-qr-img]')
+    ) as HTMLAnchorElement[];
+    const modal = document.querySelector('#social-qr-modal') as HTMLElement | null;
+    const img = document.querySelector('#social-qr-image') as HTMLImageElement | null;
+    const closeBtn = document.querySelector('[data-qr-close]') as HTMLButtonElement | null;
+
+    if (!buttons.length || !modal || !img || modal.dataset.bound === 'true') return;
+    modal.dataset.bound = 'true';
+
+    const open = (src: string) => {
+      img.src = src;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', event => {
+        const src = btn.dataset.qrImg;
+        if (!src) return;
+        event.preventDefault();
+        open(src);
+      });
+    });
+
+    closeBtn?.addEventListener('click', close);
+    modal.addEventListener('click', e => {
+      if (e.target === modal) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  };
+
+  document.addEventListener('astro:page-load', bindSocialQR);
+  document.addEventListener('astro:after-swap', bindSocialQR);
+  bindSocialQR();
+</script>

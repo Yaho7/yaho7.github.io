@@ -10,17 +10,88 @@ const URL = Astro.url;
     <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start">
       <span class="italic">分享本文到：</span>
       <div class="text-center">
-        {SHARE_LINKS.map(social => (
-          <LinkButton
-            href={`${social.href + URL}`}
-            class="scale-90 p-2 hover:rotate-6 sm:p-1"
-            title={social.linkTitle}
+        {SHARE_LINKS.map(social => {
+          const isWeChat = social.name === "微信";
+          return (
+            <LinkButton
+              href={`${social.href + URL}`}
+              class="scale-90 p-2 hover:rotate-6 sm:p-1"
+              title={social.linkTitle}
+              data-qr-template={isWeChat ? `${social.href}${encodeURIComponent(URL)}` : undefined}
+            >
+              <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
+              <span class="sr-only">{social.linkTitle}</span>
+            </LinkButton>
+          );
+        })}
+      </div>
+
+      <div
+        id="share-qr-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4"
+        aria-hidden="true"
+      >
+        <div class="relative max-w-sm rounded-2xl border border-border bg-background p-4 text-center shadow-2xl">
+          <button
+            type="button"
+            class="absolute right-2 top-2 rounded-full border border-border px-2 py-1 text-xs text-foreground/80 hover:text-accent"
+            data-qr-close
+            aria-label="关闭二维码"
           >
-            <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
-            <span class="sr-only">{social.linkTitle}</span>
-          </LinkButton>
-        ))}
+            关闭
+          </button>
+          <p class="mb-3 text-sm text-foreground/80">微信扫码分享</p>
+          <img id="share-qr-image" src="" alt="微信分享二维码" class="mx-auto h-64 w-64 rounded-lg border border-border bg-white object-contain" />
+        </div>
       </div>
     </div>
   )
 }
+
+<script>
+  const bindShareQR = () => {
+    const buttons = Array.from(
+      document.querySelectorAll('[data-qr-template]')
+    ) as HTMLAnchorElement[];
+    const modal = document.querySelector('#share-qr-modal') as HTMLElement | null;
+    const img = document.querySelector('#share-qr-image') as HTMLImageElement | null;
+    const closeBtn = document.querySelector('[data-qr-close]') as HTMLButtonElement | null;
+
+    if (!buttons.length || !modal || !img || modal.dataset.bound === 'true') return;
+    modal.dataset.bound = 'true';
+
+    const open = (src: string) => {
+      img.src = src;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', event => {
+        const tpl = btn.dataset.qrTemplate;
+        if (!tpl) return;
+        event.preventDefault();
+        open(tpl);
+      });
+    });
+
+    closeBtn?.addEventListener('click', close);
+    modal.addEventListener('click', e => {
+      if (e.target === modal) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  };
+
+  document.addEventListener('astro:page-load', bindShareQR);
+  document.addEventListener('astro:after-swap', bindShareQR);
+  bindShareQR();
+</script>

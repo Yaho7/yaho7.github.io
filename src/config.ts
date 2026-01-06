@@ -13,9 +13,9 @@ export const SITE = {
   showTags: false,
   showBackButton: true, // show back button in post detail
   editPost: {
-    enabled: true,
-    text: "编辑此页",
-    url: "https://github.com/Yaho7/yaho7.github.io/edit/main/",
+    enabled: false,
+    text: "",
+    url: "",
   },
   dynamicOgImage: false,
   dir: "ltr", // "rtl" | "auto"
