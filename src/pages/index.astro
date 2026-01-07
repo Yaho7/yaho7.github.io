@@ -7,7 +7,7 @@ import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
+
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
@@ -43,21 +43,17 @@ const totalPosts = sortedPosts.length;
           
           <div class="flex flex-wrap items-center gap-2.5">
             <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
-              <span class="text-accent">✦</span> 文章 {totalPosts}
+              <span class="text-accent"></span> 文章 {totalPosts}
             </span>
             <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
-              <span class="text-accent">★</span> 精选 {featuredPosts.length}
+              <span class="text-accent"></span> 精选 {featuredPosts.length}
             </span>
-            <a
-              target="_blank"
-              href="/rss.xml"
-              class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/80 transition-all hover:border-accent/50 hover:bg-accent/5 hover:text-accent"
-              aria-label="订阅 RSS"
-              title="订阅 RSS"
-            >
-              <IconRss width={16} height={16} class="stroke-accent stroke-2 rtl:-rotate-90" />
-              RSS
-            </a>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
+              <span class="text-accent"></span> 动态 {statuses.length}
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
+              <span class="text-accent"></span> 照片 {photos.length}
+            </span>
           </div>
           
           {
