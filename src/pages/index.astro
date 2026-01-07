@@ -14,10 +14,14 @@ import { SOCIALS } from "@/constants";
 import photos from "@/data/photos";
 
 const posts = await getCollection("blog");
+const statuses = (await getCollection("status")).sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf());
 
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const recentStatuses = statuses.slice(0, 3);
+
+const stripHtml = (html: string) => html.replace(/<[^>]+>/g, "");
 const totalPosts = sortedPosts.length;
 ---
 
@@ -26,53 +30,107 @@ const totalPosts = sortedPosts.length;
   <main id="main-content" data-layout="index" class="app-layout">
     <section
       id="hero"
-      class:list={["pt-8 pb-8", "border-b border-border"]}
+      class:list={["pt-10 pb-10", "border-b border-border"]}
     >
-      <div class="grid gap-6 sm:grid-cols-[1.8fr_1fr] sm:items-center">
-        <div>
-          <h1 class="my-2 inline-block text-4xl font-bold sm:my-4 sm:text-5xl">
-            你好，欢迎光临
-          </h1>
-          <p class="mt-2 text-foreground/80">这是 yaho 的个人网站，记录项目、随笔与照片。</p>
-          <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-foreground/70">
-            <span class="rounded-full border border-border/80 bg-background/70 px-3 py-1">文章 {totalPosts}</span>
-            <span class="rounded-full border border-border/80 bg-background/70 px-3 py-1">精选 {featuredPosts.length}</span>
+      <div class="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-start">
+        <div class="space-y-6">
+          <div>
+            <h1 class="inline-block text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+              你好，欢迎光临
+            </h1>
+            <p class="mt-4 text-lg text-foreground/75 leading-relaxed max-w-2xl">这是 yaho 的个人网站，记录项目、随笔与照片。</p>
+          </div>
+          
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
+              <span class="text-accent">✦</span> 文章 {totalPosts}
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/70">
+              <span class="text-accent">★</span> 精选 {featuredPosts.length}
+            </span>
             <a
               target="_blank"
               href="/rss.xml"
-              class="inline-flex items-center gap-1 rounded-full border border-border/80 bg-background/70 px-3 py-1 text-foreground/80 transition hover:text-accent"
+              class="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-3.5 py-1.5 text-sm font-medium text-foreground/80 transition-all hover:border-accent/50 hover:bg-accent/5 hover:text-accent"
               aria-label="订阅 RSS"
               title="订阅 RSS"
             >
-              <IconRss width={18} height={18} class="stroke-accent stroke-2 rtl:-rotate-90" />
-              RSS 订阅
+              <IconRss width={16} height={16} class="stroke-accent stroke-2 rtl:-rotate-90" />
+              RSS
             </a>
           </div>
+          
           {
             SOCIALS.length > 0 && (
-              <div class="mt-4 flex max-sm:flex-col sm:items-center">
-                <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">社交链接：</div>
+              <div class="flex max-sm:flex-col sm:items-center gap-2">
+                <div class="text-sm font-medium text-foreground/60">社交链接</div>
                 <Socials />
               </div>
             )
           }
         </div>
-        <div class="rounded-2xl border border-border bg-background/60 p-3 shadow-sm">
-          <div class="flex items-center justify-between text-sm text-foreground/70">
-            <span>最新照片</span>
-            <LinkButton href="/photos" class="text-xs">查看全部 →</LinkButton>
+        
+        <div class="space-y-4">
+          {/* 最新照片 */}
+          <div class="rounded-2xl border border-border bg-background/60 p-4 shadow-sm backdrop-blur-sm transition-all hover:shadow-md hover:border-accent/20">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-semibold text-foreground/80">最新照片</span>
+              <LinkButton href="/photos" class="text-xs font-medium">查看全部 →</LinkButton>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5">
+              {photos.slice(0, 3).map(photo => (
+                <div class="group relative aspect-[4/3] overflow-hidden rounded-lg border border-border">
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-          <div class="mt-3 grid grid-cols-3 gap-2">
-            {photos.slice(0, 3).map(photo => (
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                loading="lazy"
-                decoding="async"
-                class="aspect-[4/3] w-full rounded-xl border border-border object-cover"
-              />
-            ))}
-          </div>
+
+          {/* 最新动态 */}
+          {
+            recentStatuses.length > 0 && (
+              <div class="rounded-2xl border border-border bg-background/60 p-4 shadow-sm backdrop-blur-sm transition-all hover:shadow-md hover:border-accent/20">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-sm font-semibold text-foreground/80">最新动态</span>
+                  <LinkButton href="/status" class="text-xs font-medium">查看全部 →</LinkButton>
+                </div>
+                <div class="space-y-3">
+                  {recentStatuses.slice(0, 2).map(item => (
+                    <article class="group">
+                      <div class="flex gap-2.5">
+                        {item.data.images?.[0] && (
+                          <div class="shrink-0 w-16 aspect-square overflow-hidden rounded-lg border border-border bg-background/70">
+                            <img
+                              src={item.data.images[0]}
+                              alt={`${item.data.title} 图片预览`}
+                              loading="lazy"
+                              decoding="async"
+                              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                          </div>
+                        )}
+                        <div class="flex-1 min-w-0">
+                          <h3 class="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-accent transition-colors leading-snug">{item.data.title}</h3>
+                          <p class="mt-1 line-clamp-2 text-xs text-foreground/60 leading-relaxed">
+                            {stripHtml(item.body || "").slice(0, 60)}
+                          </p>
+                          <time class="mt-1.5 block text-[11px] text-foreground/50 font-medium" datetime={item.data.pubDatetime.toISOString()}>
+                            {item.data.pubDatetime.toLocaleDateString("zh-CN")}
+                          </time>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )
+          }
         </div>
       </div>
     </section>
@@ -82,12 +140,12 @@ const totalPosts = sortedPosts.length;
         <section
           id="featured"
           class:list={[
-            "pt-12 pb-6",
+            "pt-12 pb-8",
             { "border-b border-border": recentPosts.length > 0 },
           ]}
         >
-          <h2 class="text-2xl font-semibold tracking-wide">精选推荐</h2>
-          <ul>
+          <h2 class="mb-6 text-2xl font-semibold tracking-tight">精选推荐</h2>
+          <ul class="space-y-4">
             {featuredPosts.map(data => (
               <Card variant="h3" {...data} />
             ))}
@@ -98,9 +156,9 @@ const totalPosts = sortedPosts.length;
 
     {
       recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">最新文章</h2>
-          <ul>
+        <section id="recent-posts" class="pt-12 pb-8">
+          <h2 class="mb-6 text-2xl font-semibold tracking-tight">最新文章</h2>
+          <ul class="space-y-4">
             {recentPosts.map(
               (data, index) =>
                 index < SITE.postPerIndex && <Card variant="h3" {...data} />
@@ -110,10 +168,10 @@ const totalPosts = sortedPosts.length;
       )
     }
 
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        所有文章
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
+    <div class="py-10 text-center">
+      <LinkButton href="/posts/" class="inline-flex items-center gap-2 text-base font-medium">
+        查看所有文章
+        <IconArrowRight class="inline-block w-4 h-4 rtl:-rotate-180" />
       </LinkButton>
     </div>
   </main>

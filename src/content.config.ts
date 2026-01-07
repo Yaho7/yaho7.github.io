@@ -23,4 +23,13 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const status = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/data/status" }),
+  schema: z.object({
+    title: z.string(),
+    pubDatetime: z.date(),
+    images: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, status };
