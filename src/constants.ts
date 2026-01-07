@@ -32,7 +32,7 @@ export const SOCIALS: Social[] = [
     href: "https://weixin.qq.com/",
     linkTitle: `${SITE.title} 的 微信`,
     icon: IconWeChat,
-    qrImage: "/wechat-qr.jpg",
+    qrImage: "/wechat-qr.svg",
   },
 ] as const;
 
