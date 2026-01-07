@@ -28,7 +28,7 @@ const status = defineCollection({
   schema: z.object({
     title: z.string(),
     pubDatetime: z.date(),
-    images: z.array(z.string()).default([]),
+    images: z.array(z.string()).optional().default([]),
   }),
 });
 

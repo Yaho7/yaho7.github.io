@@ -1,7 +1,6 @@
 import type { Props } from "astro";
 import IconMail from "@/assets/icons/IconMail.svg";
 import IconGitHub from "@/assets/icons/IconGitHub.svg";
-import IconZhihu from "@/assets/icons/IconZhihu.svg";
 import IconWeChat from "@/assets/icons/IconWeChat.svg";
 import IconWeibo from "@/assets/icons/IconWeibo.svg";
 import IconQQ from "@/assets/icons/IconQQ.svg";
