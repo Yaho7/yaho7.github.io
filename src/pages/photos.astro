@@ -4,7 +4,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/layouts/Main.astro";
 import PhotoWall from "@/components/PhotoWall.astro";
-import photos from "@/data/photos";
+import collections from "@/data/photos";
 import { SITE } from "@/config";
 
 const pageTitle = "照片墙";
@@ -17,7 +17,7 @@ const pageDesc = "";
 >
   <Header />
   <Main pageTitle={pageTitle} pageDesc={pageDesc}>
-    <PhotoWall photos={photos} />
+    <PhotoWall collections={collections} />
   </Main>
   <Footer />
 </Layout>
