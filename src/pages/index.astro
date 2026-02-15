@@ -11,7 +11,7 @@ import getSortedPosts from "@/utils/getSortedPosts";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
-import photos from "@/data/photos";
+import { photos } from "@/data/photos";
 
 const posts = await getCollection("blog");
 const statuses = (await getCollection("status")).sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf());
