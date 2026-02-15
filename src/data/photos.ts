@@ -76,14 +76,9 @@ export const collections: PhotoCollection[] = [
     ],
   },
   {
-    title: "生活",
-    description: "日常点滴",
+    title: "日常",
+    description: "",
     photos: [
-      {
-        title: "107崇德寺合影",
-        alt: "107崇德寺合影",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/7f2dad3eed4242ff.jpg",
-      },
       {
         title: "露营",
         alt: "露营",
