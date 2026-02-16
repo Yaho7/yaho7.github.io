@@ -61,7 +61,7 @@ const totalPhotos = collections.reduce((acc, curr) => acc + curr.photos.length, 
               data-src={photo.src}
               data-title={photo.title}
               data-alt={photo.alt}
-              data-location={photo.location ?? "随记"}
+              data-location={photo.location}
               data-date={photo.date ?? ""}
               tabindex="0"
               role="button"

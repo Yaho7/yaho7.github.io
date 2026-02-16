@@ -20,19 +20,19 @@ export const collections: PhotoCollection[] = [
     date: "2023年4月",
     photos: [
       {
-        title: "丽江",
-        alt: "丽江",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/cb15b94ac0ec5891.jpg",
+        title: "丽江湖边",
+        alt: "丽江湖边",
+        src: "https://img.yaho7.cn/2026/02/d03a6920deb4b7745ad99ab3f8b7581d.jpeg",
       },
       {
         title: "玉龙雪山",
         alt: "玉龙雪山",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/065c7486f8e9f5fd.jpg",
+        src: "https://img.yaho7.cn/2026/02/941c1b5a001cb79b471650e6eab72ffe.jpeg",
       },
       {
-        title: "107崇德寺合影",
-        alt: "107崇德寺合影",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/7f2dad3eed4242ff.jpg",
+        title: "崇德寺",
+        alt: "崇德寺",
+        src: "https://img.yaho7.cn/2026/02/51fe05d2f0b1ffe504a4b7eaa922081e.jpeg",
       },
       {
         title: "湖边",
@@ -47,9 +47,9 @@ export const collections: PhotoCollection[] = [
     date: "2021年7月",
     photos: [
       {
-        title: "三下乡",
-        alt: "三下乡",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/e319508da3fc952d.jpg",
+        title: "笑",
+        alt: "笑",
+        src: "https://img.yaho7.cn/2026/02/c810685a0a2e150ae81b8bdb15e3e3fc.jpg",
       },
       {
         title: "合照",
@@ -89,9 +89,9 @@ export const collections: PhotoCollection[] = [
     date: "Before 2026",
     photos: [
       {
-        title: "露营",
-        alt: "露营",
-        src: "https://s3.bmp.ovh/imgs/2025/04/20/8d312aee2944bf6d.jpg",
+        title: "日出",
+        alt: "日出",
+        src: "https://img.yaho7.cn/2026/02/77a44819e97317526c95391fb7bcd83c.jpg",
       },
     ],
   },
