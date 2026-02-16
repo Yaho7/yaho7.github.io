@@ -35,7 +35,7 @@ export const collections: PhotoCollection[] = [
       {
         title: "湖边",
         alt: "湖边",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/8c319e7bd198ffdfbf600cbae60b1c67.jpeg",
+        src: "https://img.yaho7.cn/2026/02/8c319e7bd198ffdfbf600cbae60b1c67.jpeg",
       },
     ],
   },
@@ -51,27 +51,27 @@ export const collections: PhotoCollection[] = [
       {
         title: "笑",
         alt: "笑",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/78fb1e88f16f8247af0ac42958f1878a.jpeg",
+        src: "https://img.yaho7.cn/2026/02/78fb1e88f16f8247af0ac42958f1878a.jpeg",
       },
       {
         title: "无奈中",
         alt: "无奈中",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/205bbb4c8c09f4fa030880021860560c.jpeg",
+        src: "https://img.yaho7.cn/2026/02/205bbb4c8c09f4fa030880021860560c.jpeg",
       },
       {
         title: "玩相机",
         alt: "玩相机",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/58b7b6892ae2e75523f56d35c8257c85.jpeg",
+        src: "https://img.yaho7.cn/2026/02/58b7b6892ae2e75523f56d35c8257c85.jpeg",
       },
       {
         title: "玩无人机",
         alt: "玩无人机",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/2d8588aeeab9be310a4cc1b86bb16d7a.jpeg",
+        src: "https://img.yaho7.cn/2026/02/2d8588aeeab9be310a4cc1b86bb16d7a.jpeg",
       },
       {
         title: "授课",
         alt: "授课",
-        src: "https://image-storage.3283def3aabe4851ded4880960152c1c.r2.cloudflarestorage.com/2026/02/d25ef17d321929099696bfe2771d4d4b.jpeg",
+        src: "https://img.yaho7.cn/2026/02/d25ef17d321929099696bfe2771d4d4b.jpeg",
       },
     ],
   },
