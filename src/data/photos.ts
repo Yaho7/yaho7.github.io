@@ -9,13 +9,15 @@ export type Photo = {
 export type PhotoCollection = {
   title: string;
   description?: string;
+  date?: string;
   photos: Photo[];
 };
 
 export const collections: PhotoCollection[] = [
   {
     title: "毕业旅行:云南",
-    description: "2023年4月",
+    description: "",
+    date: "2023年4月",
     photos: [
       {
         title: "丽江",
@@ -41,7 +43,8 @@ export const collections: PhotoCollection[] = [
   },
   {
     title: "支教",
-    description: "2021年7月",
+    description: "那年夏天的记忆",
+    date: "2021年7月",
     photos: [
       {
         title: "三下乡",
@@ -83,6 +86,7 @@ export const collections: PhotoCollection[] = [
   {
     title: "日常",
     description: "",
+    date: "Before 2026",
     photos: [
       {
         title: "露营",
