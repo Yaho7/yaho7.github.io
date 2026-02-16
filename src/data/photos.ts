@@ -49,6 +49,11 @@ export const collections: PhotoCollection[] = [
         src: "https://s3.bmp.ovh/imgs/2025/04/20/e319508da3fc952d.jpg",
       },
       {
+        title: "合照",
+        alt: "合照",
+        src: "https://img.yaho7.cn/2026/02/e965e034a10b64413feccd64e3a511d2.jpeg",
+      },
+      {
         title: "笑",
         alt: "笑",
         src: "https://img.yaho7.cn/2026/02/78fb1e88f16f8247af0ac42958f1878a.jpeg",
