@@ -1,0 +1,101 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import { SITE } from "@/config";
+
+const policySections = [
+  {
+    title: "1. 我们处理哪些信息",
+    body: "腕上记分主要用于本地记分、历史记录与统计分析。应用可能会处理你手动记录的比赛分数、规则、备注、标签、队友与对手信息，以及在你授权情况下由 Apple Watch 产生的运动与心率相关数据。",
+  },
+  {
+    title: "2. 信息会被如何使用",
+    body: "这些信息仅用于完成比赛记分、保存结果、展示历史记录与统计分析、生成分享卡片，以及改善应用功能与用户体验。",
+  },
+  {
+    title: "3. 数据存储方式",
+    body: "你在应用内创建的大部分内容默认存储在你的设备本地。部分数据是否在 Apple 设备之间同步，取决于系统能力、你的设备设置以及应用功能设计。",
+  },
+  {
+    title: "4. 健康数据与运动数据",
+    body: "如果你授权相关权限，应用可能会读取或记录与运动相关的数据，例如心率、运动摘要或训练记录。这些数据仅用于比赛过程中的展示、赛后统计与相关功能，不会被用于广告投放。",
+  },
+  {
+    title: "5. 我们是否出售数据",
+    body: "不会。腕上记分不会向第三方出售你的个人信息或健康数据。",
+  },
+  {
+    title: "6. 第三方服务",
+    body: "应用运行过程中可能依赖 Apple 提供的系统能力与框架，例如 Apple Watch、HealthKit、系统分享面板等。相关数据处理也可能受 Apple 的隐私政策约束。",
+  },
+  {
+    title: "7. 你的控制权",
+    body: "你可以随时在应用内删除历史记录，在系统设置中关闭健康、通知等权限，或停止继续使用应用。",
+  },
+  {
+    title: "8. 未成年人隐私",
+    body: "如果你是未成年人，请在监护人同意和指导下使用本应用。",
+  },
+  {
+    title: "9. 联系我们",
+    body: "如果你对本隐私政策有任何疑问，可以通过邮箱 i@yaho7.cn 联系我们。",
+  },
+];
+---
+
+<Layout
+  title={`腕上记分隐私政策 | ${SITE.title}`}
+  description="腕上记分隐私政策页面，说明应用如何处理比赛记录、运动数据与相关权限。"
+>
+  <Header />
+  <Breadcrumb />
+
+  <main id="main-content" class="app-layout pb-20">
+    <section class="rounded-[2rem] border border-border bg-gradient-to-br from-background via-background to-accent/[0.06] px-6 py-10 shadow-sm sm:px-10">
+      <div class="max-w-3xl">
+        <p class="text-sm font-semibold tracking-[0.18em] text-accent uppercase">Privacy Policy</p>
+        <h1 class="mt-3 text-4xl font-black tracking-tight sm:text-5xl">腕上记分隐私政策</h1>
+        <p class="mt-4 text-sm text-foreground/55">更新日期：2026-04-19</p>
+        <p class="mt-6 text-base leading-8 text-foreground/75 sm:text-lg">
+          本隐私政策用于说明腕上记分如何处理与你相关的信息。我们尽量以清晰、直接的方式说明应用中会涉及哪些数据、这些数据如何被使用，以及你可以如何管理自己的权限与内容。
+        </p>
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-[1.75rem] border border-border bg-background p-6 shadow-sm sm:p-8">
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-2xl border border-border/70 bg-foreground/[0.02] p-5">
+          <div class="text-sm font-semibold text-accent">核心原则</div>
+          <div class="mt-2 text-sm leading-7 text-foreground/75">
+            以本地记录为主，按授权使用系统能力，不出售个人与健康数据。
+          </div>
+        </div>
+        <div class="rounded-2xl border border-border/70 bg-foreground/[0.02] p-5">
+          <div class="text-sm font-semibold text-accent">涉及内容</div>
+          <div class="mt-2 text-sm leading-7 text-foreground/75">
+            比赛记录、规则、备注、人物信息，以及授权后的运动与心率数据。
+          </div>
+        </div>
+        <div class="rounded-2xl border border-border/70 bg-foreground/[0.02] p-5">
+          <div class="text-sm font-semibold text-accent">你的控制权</div>
+          <div class="mt-2 text-sm leading-7 text-foreground/75">
+            你可以删除记录、关闭权限，或随时停止继续使用应用。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-10 space-y-4">
+      {policySections.map(section => (
+        <article class="rounded-2xl border border-border bg-background p-6 shadow-sm sm:p-7">
+          <h2 class="text-xl font-bold text-foreground">{section.title}</h2>
+          <p class="mt-3 text-sm leading-8 text-foreground/75 sm:text-base">{section.body}</p>
+        </article>
+      ))}
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
