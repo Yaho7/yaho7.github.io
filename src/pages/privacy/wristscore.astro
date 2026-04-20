@@ -33,14 +33,31 @@ const policySections = [
   <Breadcrumb />
 
   <main id="main-content" class="app-layout pb-20">
-    <section class="rounded-[2rem] border border-border bg-gradient-to-br from-background via-background to-accent/[0.06] px-6 py-10 shadow-sm sm:px-10">
-      <div class="max-w-3xl">
-        <p class="text-sm font-semibold tracking-[0.18em] text-accent uppercase">Privacy Policy</p>
-        <h1 class="mt-3 text-4xl font-black tracking-tight sm:text-5xl">腕上记分隐私政策</h1>
-        <p class="mt-4 text-sm text-foreground/55">更新日期：2026-04-20</p>
-        <p class="mt-6 text-base leading-8 text-foreground/75 sm:text-lg">
-          感谢您使用“腕上记分”应用。我们非常重视您的隐私，并承诺保护您的个人信息。本隐私政策旨在说明我们如何处理您的数据。
-        </p>
+    <section class="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-to-br from-background via-background to-accent/[0.06] px-6 py-10 shadow-sm sm:px-10 sm:py-14">
+      <div class="absolute -top-16 right-[-2rem] h-48 w-48 rounded-full bg-accent/10 blur-3xl"></div>
+      <div class="absolute bottom-[-5rem] left-[-2rem] h-44 w-44 rounded-full bg-foreground/5 blur-3xl"></div>
+
+      <div class="relative grid gap-10 lg:grid-cols-[1.3fr_0.75fr] lg:items-center">
+        <div class="max-w-3xl">
+          <p class="text-sm font-semibold tracking-[0.18em] text-accent uppercase">Privacy Policy</p>
+          <h1 class="mt-3 text-4xl font-black tracking-tight sm:text-5xl">腕上记分隐私政策</h1>
+          <p class="mt-4 text-sm text-foreground/55">更新日期：2026-04-20</p>
+          <p class="mt-6 text-base leading-8 text-foreground/75 sm:text-lg">
+            感谢您使用“腕上记分”应用。我们非常重视您的隐私，并承诺保护您的个人信息。本隐私政策旨在说明我们如何处理您的数据。
+          </p>
+        </div>
+
+        <div class="flex justify-center lg:justify-end">
+          <div class="rounded-[2rem] border border-white/50 bg-white/55 p-3 shadow-[0_20px_60px_rgba(15,23,42,0.16)] backdrop-blur">
+            <img
+              src="/apps/wristscore_icon.png"
+              alt="腕上记分 App 图标"
+              class="h-36 w-36 rounded-[1.6rem] object-cover shadow-[0_10px_30px_rgba(15,23,42,0.14)] sm:h-44 sm:w-44"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
