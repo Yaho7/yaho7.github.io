@@ -1,10 +1,12 @@
 ---
 // Remove current url path and remove trailing slash if exists
 const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
+const rawBreadcrumbList = currentUrlPath.split("/").slice(1);
+const isWristScorePage = rawBreadcrumbList[0] === "wristscore";
 
 // Get url array from path
 // eg: /tags/tailwindcss => ['tags', 'tailwindcss']
-const breadcrumbList = currentUrlPath.split("/").slice(1);
+const breadcrumbList = [...rawBreadcrumbList];
 
 const labelMap: Record<string, string> = {
   posts: "文章",
@@ -13,16 +15,13 @@ const labelMap: Record<string, string> = {
   archives: "归档",
   search: "搜索",
   tags: "标签",
+  wristscore: "腕上记分",
 };
 
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
 if (breadcrumbList[0] === "posts") {
-  breadcrumbList.splice(
-    0,
-    2,
-    `文章（第${breadcrumbList[1] || 1}页）`
-  );
+  breadcrumbList.splice(0, 2, `文章（第${breadcrumbList[1] || 1}页）`);
 }
 
 // Replace top-level segments with localized labels where defined
@@ -37,11 +36,17 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     1,
     3,
     `${decodeURIComponent(breadcrumbList[1])}${
-      Number(breadcrumbList[2]) === 1
-        ? ""
-        : `（第${breadcrumbList[2]}页）`
+      Number(breadcrumbList[2]) === 1 ? "" : `（第${breadcrumbList[2]}页）`
     }`
   );
+}
+
+if (isWristScorePage) {
+  if (rawBreadcrumbList[1] === "privacy") {
+    breadcrumbList[1] = "隐私政策";
+  } else if (rawBreadcrumbList[1] === "support") {
+    breadcrumbList[1] = "技术支持";
+  }
 }
 ---
 
@@ -50,7 +55,13 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     class="font-light [&>li]:inline [&>li:not(:last-child)>a]:hover:opacity-100"
   >
     <li>
-      <a href="/" class="opacity-80">首页</a>
+      <a
+        href="/"
+        class="opacity-80"
+        data-ws-text={isWristScorePage ? "strings.breadcrumbHome" : undefined}
+      >
+        首页
+      </a>
       <span aria-hidden="true" class="opacity-80">&raquo;</span>
     </li>
     {
@@ -60,13 +71,35 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
             <span
               class:list={["opacity-75"]}
               aria-current="page"
+              data-ws-text={
+                isWristScorePage
+                  ? index === 0
+                    ? "strings.breadcrumbRoot"
+                    : "strings.breadcrumbCurrent"
+                  : undefined
+              }
             >
               {decodeURIComponent(breadcrumb)}
             </span>
           </li>
         ) : (
           <li>
-            <a href={`/${breadcrumb}/`} class="opacity-70">
+            <a
+              href={
+                isWristScorePage && index === 0
+                  ? "/wristscore/"
+                  : `/${breadcrumb}/`
+              }
+              class="opacity-70"
+              data-ws-text={
+                isWristScorePage && index === 0
+                  ? "strings.breadcrumbRoot"
+                  : undefined
+              }
+              data-ws-preserve-lang={
+                isWristScorePage && index === 0 ? true : undefined
+              }
+            >
               {decodeURIComponent(breadcrumb)}
             </a>
             <span aria-hidden="true">&raquo;</span>

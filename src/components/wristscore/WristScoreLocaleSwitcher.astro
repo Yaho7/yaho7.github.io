@@ -1,0 +1,341 @@
+---
+import {
+  WRISTSCORE_DEFAULT_LOCALE,
+  WRISTSCORE_ENABLED_LANGUAGES,
+} from "@/data/wristscoreI18n";
+
+type Props = {
+  messages: Record<string, unknown>;
+  showSelector?: boolean;
+  wrapperClass?: string;
+};
+
+const { messages, showSelector = true, wrapperClass = "" } = Astro.props;
+---
+
+{
+  showSelector && (
+    <div class:list={["flex items-center justify-end", wrapperClass]}>
+      <div class="inline-flex items-center gap-3 rounded-full border border-border bg-background/85 px-3 py-2 shadow-sm backdrop-blur">
+        <label
+          for="wristscore-locale"
+          class="text-xs font-semibold tracking-[0.16em] text-foreground/55 uppercase"
+          data-ws-text="common.languageLabel"
+        >
+          语言
+        </label>
+        <select
+          id="wristscore-locale"
+          class="min-w-36 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition outline-none focus:border-accent"
+          data-ws-locale-select
+          data-ws-attr="aria-label:common.languageLabel"
+        >
+          {WRISTSCORE_ENABLED_LANGUAGES.map(locale => (
+            <option value={locale.code}>{locale.label}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  )
+}
+
+<script
+  is:inline
+  define:vars={{
+    defaultLocale: WRISTSCORE_DEFAULT_LOCALE,
+    locales: WRISTSCORE_ENABLED_LANGUAGES,
+    messages,
+  }}
+>
+  const STORAGE_KEY = "wristscore-locale";
+
+  const supportedLocales = locales.map(locale => locale.code);
+
+  const escapeHtml = value =>
+    String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+  const getByPath = (object, path) => {
+    if (!path) return undefined;
+
+    return path.split(".").reduce((current, segment) => {
+      if (current && typeof current === "object" && segment in current) {
+        return current[segment];
+      }
+
+      return undefined;
+    }, object);
+  };
+
+  const normalizeLocale = value => {
+    if (!value) return defaultLocale;
+    if (supportedLocales.includes(value)) return value;
+
+    const matched = supportedLocales.find(
+      locale => locale.split("-")[0] === value
+    );
+    return matched ?? defaultLocale;
+  };
+
+  const listRenderers = {
+    "feature-cards": items =>
+      items
+        .map(
+          item => `
+            <article class="rounded-2xl border border-border bg-background/85 p-5 shadow-sm transition hover:-translate-y-[2px] hover:shadow-accent/10">
+              <h2 class="text-base font-semibold text-foreground">${escapeHtml(item.title)}</h2>
+              <p class="mt-2 text-sm leading-7 text-foreground/70">${escapeHtml(item.desc)}</p>
+            </article>
+          `
+        )
+        .join(""),
+    "numbered-features": items =>
+      items
+        .map(
+          (item, index) => `
+            <div class="flex gap-4 border-b border-border/70 pb-5 last:border-b-0 last:pb-0">
+              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/12 text-sm font-bold text-accent">
+                ${index + 1}
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-foreground">${escapeHtml(item.title)}</h3>
+                <p class="mt-1 text-sm leading-7 text-foreground/70">${escapeHtml(item.desc)}</p>
+              </div>
+            </div>
+          `
+        )
+        .join(""),
+    "bullet-list": items =>
+      items.map(item => `<li>${escapeHtml(item)}</li>`).join(""),
+    "checklist-cards": items =>
+      items
+        .map(
+          item => `
+            <div class="rounded-xl border border-border/70 bg-foreground/[0.02] px-4 py-3 text-sm text-foreground/75">
+              ${escapeHtml(item)}
+            </div>
+          `
+        )
+        .join(""),
+    "faq-items": items =>
+      items
+        .map(
+          item => `
+            <article class="rounded-2xl border border-border bg-background p-6 shadow-sm">
+              <h3 class="text-lg font-semibold text-foreground">${escapeHtml(item.question)}</h3>
+              <p class="mt-3 text-sm leading-7 text-foreground/75">${escapeHtml(item.answer)}</p>
+            </article>
+          `
+        )
+        .join(""),
+    "policy-sections": items =>
+      items
+        .map(
+          item => `
+            <article class="rounded-2xl border border-border bg-background p-6 shadow-sm sm:p-7">
+              <h2 class="text-xl font-bold text-foreground">${escapeHtml(item.title)}</h2>
+              <p class="mt-3 text-sm leading-8 text-foreground/75 sm:text-base">${escapeHtml(item.body)}</p>
+            </article>
+          `
+        )
+        .join(""),
+    "summary-cards": items =>
+      items
+        .map(
+          item => `
+            <div class="rounded-2xl border border-border/70 bg-foreground/[0.02] p-5">
+              <div class="text-sm font-semibold text-accent">${escapeHtml(item.title)}</div>
+              <div class="mt-2 text-sm leading-7 text-foreground/75">${escapeHtml(item.desc)}</div>
+            </div>
+          `
+        )
+        .join(""),
+  };
+
+  const setLocalizedText = (root, content) => {
+    root.querySelectorAll("[data-ws-text]").forEach(element => {
+      const value = getByPath(content, element.dataset.wsText);
+
+      if (typeof value === "string") {
+        element.textContent = value;
+      }
+    });
+  };
+
+  const setLocalizedAttributes = (root, content) => {
+    root.querySelectorAll("[data-ws-attr]").forEach(element => {
+      const instructions = element.dataset.wsAttr
+        .split(";")
+        .map(item => item.trim())
+        .filter(Boolean);
+
+      instructions.forEach(instruction => {
+        const [attribute, path] = instruction
+          .split(":")
+          .map(item => item.trim());
+        const value = getByPath(content, path);
+
+        if (attribute && typeof value === "string") {
+          element.setAttribute(attribute, value);
+        }
+      });
+    });
+  };
+
+  const setLocalizedLists = (root, content) => {
+    root.querySelectorAll("[data-ws-list]").forEach(container => {
+      const items = getByPath(content, `lists.${container.dataset.wsList}`);
+      const renderer = listRenderers[container.dataset.wsRender];
+
+      if (Array.isArray(items) && typeof renderer === "function") {
+        container.innerHTML = renderer(items);
+      }
+    });
+  };
+
+  const updateToggleButtons = locale => {
+    const nextLocale = locale === "en" ? "zh-CN" : "en";
+
+    document.querySelectorAll("[data-ws-toggle]").forEach(button => {
+      const label =
+        nextLocale === "en"
+          ? (button.dataset.wsLabelEn ?? "English")
+          : (button.dataset.wsLabelZh ?? "中文");
+
+      button.textContent = label;
+      button.setAttribute("aria-label", label);
+      button.setAttribute("title", label);
+    });
+  };
+
+  const updateMeta = content => {
+    if (!content?.meta) return;
+
+    document.title = content.meta.title;
+
+    const mappings = [
+      ['meta[name="title"]', content.meta.title],
+      ['meta[name="description"]', content.meta.description],
+      ['meta[property="og:title"]', content.meta.title],
+      ['meta[property="og:description"]', content.meta.description],
+      ['meta[property="twitter:title"]', content.meta.title],
+      ['meta[property="twitter:description"]', content.meta.description],
+    ];
+
+    mappings.forEach(([selector, value]) => {
+      const element = document.querySelector(selector);
+      if (element && typeof value === "string") {
+        element.setAttribute("content", value);
+      }
+    });
+  };
+
+  const setCurrentUrlLocale = locale => {
+    const url = new URL(window.location.href);
+
+    if (locale === defaultLocale) {
+      url.searchParams.delete("lang");
+    } else {
+      url.searchParams.set("lang", locale);
+    }
+
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${url.pathname}${url.search}${url.hash}`
+    );
+  };
+
+  const updateLocalizedLinks = (root, locale) => {
+    root.querySelectorAll("[data-ws-preserve-lang]").forEach(link => {
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("mailto:")) return;
+
+      const url = new URL(href, window.location.origin);
+
+      if (url.origin !== window.location.origin) return;
+
+      if (locale === defaultLocale) {
+        url.searchParams.delete("lang");
+      } else {
+        url.searchParams.set("lang", locale);
+      }
+
+      link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`);
+    });
+  };
+
+  const resolveInitialLocale = () => {
+    const searchLocale = new URL(window.location.href).searchParams.get("lang");
+    if (searchLocale) return normalizeLocale(searchLocale);
+
+    const storedLocale = window.localStorage.getItem(STORAGE_KEY);
+    if (storedLocale) return normalizeLocale(storedLocale);
+
+    return defaultLocale;
+  };
+
+  const applyLocale = (root, locale) => {
+    const normalizedLocale = normalizeLocale(locale);
+    const content = messages[normalizedLocale] ?? messages[defaultLocale];
+
+    if (!content) return;
+
+    root.dataset.wsLocale = normalizedLocale;
+    document.documentElement.lang = normalizedLocale;
+
+    root.querySelectorAll("[data-ws-locale-select]").forEach(select => {
+      select.value = normalizedLocale;
+    });
+
+    setLocalizedText(root, content);
+    setLocalizedAttributes(root, content);
+    setLocalizedLists(root, content);
+    updateMeta(content);
+    updateLocalizedLinks(root, normalizedLocale);
+    updateToggleButtons(normalizedLocale);
+    setCurrentUrlLocale(normalizedLocale);
+
+    window.localStorage.setItem(STORAGE_KEY, normalizedLocale);
+  };
+
+  const bindSwitcher = root => {
+    root.querySelectorAll("[data-ws-locale-select]").forEach(select => {
+      if (select.dataset.wsBound === "true") return;
+
+      select.dataset.wsBound = "true";
+      select.addEventListener("change", event => {
+        applyLocale(root, event.currentTarget.value);
+      });
+    });
+  };
+
+  const bindToggleButtons = root => {
+    root.querySelectorAll("[data-ws-toggle]").forEach(button => {
+      if (button.dataset.wsBound === "true") return;
+
+      button.dataset.wsBound = "true";
+      button.addEventListener("click", () => {
+        const currentLocale = normalizeLocale(root.dataset.wsLocale);
+        const nextLocale = currentLocale === "en" ? "zh-CN" : "en";
+        applyLocale(root, nextLocale);
+      });
+    });
+  };
+
+  const init = () => {
+    const root = document.querySelector("[data-wristscore-page]");
+    if (!root) return;
+
+    bindSwitcher(root);
+    bindToggleButtons(root);
+    applyLocale(root, resolveInitialLocale());
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>
