@@ -23,6 +23,9 @@ importers:
       astro:
         specifier: ^5.16.6
         version: 5.16.6(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.41.1)(typescript@5.9.3)(yaml@2.7.1)
+      astro-seo:
+        specifier: ^1.1.0
+        version: 1.1.0(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -1138,6 +1141,9 @@ packages:
   astro-eslint-parser@1.2.1:
     resolution: {integrity: sha512-3oqANMjrvJ+IE5pwlUWsH/4UztmYf/GTL0HPUkWnYBNAHiGVGrOh2EbegxS5niAwlO0w9dRYk0CkCPlJcu8c3Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  astro-seo@1.1.0:
+    resolution: {integrity: sha512-G6LDNDyga30o+52v58jU7C35n3cORUzk7RSuY+xf/ZRbW6JiNplyaOO1VoYVKO+xzYNaBcxqNln2RFRR/wgJNQ==}
 
   astro@5.16.6:
     resolution: {integrity: sha512-6mF/YrvwwRxLTu+aMEa5pwzKUNl5ZetWbTyZCs9Um0F12HUmxUiF5UHiZPy4rifzU3gtpM3xP2DfdmkNX9eZRg==}
@@ -3854,6 +3860,14 @@ snapshots:
       semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
+
+  astro-seo@1.1.0(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3):
+    dependencies:
+      '@astrojs/check': 0.9.6(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3)
+    transitivePeerDependencies:
+      - prettier
+      - prettier-plugin-astro
+      - typescript
 
   astro@5.16.6(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.41.1)(typescript@5.9.3)(yaml@2.7.1):
     dependencies:
